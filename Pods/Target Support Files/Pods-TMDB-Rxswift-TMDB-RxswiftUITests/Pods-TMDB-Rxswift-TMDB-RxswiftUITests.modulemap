@@ -1,0 +1,6 @@
+framework module Pods_TMDB_Rxswift_TMDB_RxswiftUITests {
+  umbrella header "Pods-TMDB-Rxswift-TMDB-RxswiftUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
