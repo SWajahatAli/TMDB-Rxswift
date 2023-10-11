@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol MovieAPI {
-    func fetchPopularMovies() -> Single<PopularMovieModelResponse>
-    func fetchUpmcomingMovies() -> Single<UpcomingMoviesModelResponse>
-    func fetchTopRateMovies() -> Single<TopRatedMovieModelResponse>
+    func fetchPopularMovies() -> Single<MovieModelResponse>
+    func fetchUpmcomingMovies() -> Single<MovieModelResponse>
+    func fetchTopRateMovies() -> Single<MovieModelResponse>
 }

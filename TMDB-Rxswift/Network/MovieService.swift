@@ -14,15 +14,15 @@ class MovieService {
 }
 
 extension MovieService: MovieAPI {
-    func fetchPopularMovies() -> Single<PopularMovieModelResponse> {
+    func fetchPopularMovies() -> Single<MovieModelResponse> {
         return Single.create { (single) -> Disposable in
             do {
                 let request = try MovieRouter.getPopularMovies.request(usingHttpService: self.httpService)
-                request.responseDecodable(of: PopularMovieModelResponse.self) { response in
+                request.responseDecodable(of: MovieModelResponse.self) { response in
                     guard let data = response.data else { return }
                     
                     do {
-                        let responseData = try JSONDecoder().decode(PopularMovieModelResponse.self, from: data)
+                        let responseData = try JSONDecoder().decode(MovieModelResponse.self, from: data)
                         single(.success(responseData))
                     } catch(let err) {
                         print(err)
@@ -38,15 +38,15 @@ extension MovieService: MovieAPI {
         }
     }
     
-    func fetchTopRateMovies() -> Single<TopRatedMovieModelResponse> {
+    func fetchTopRateMovies() -> Single<MovieModelResponse> {
         return Single.create { (single) -> Disposable in
             do {
                 let request = try MovieRouter.getTopRatedMovies.request(usingHttpService: self.httpService)
-                request.responseDecodable(of: TopRatedMovieModelResponse.self) { response in
+                request.responseDecodable(of: MovieModelResponse.self) { response in
                     guard let data = response.data else { return }
                     
                     do {
-                        let responseData = try JSONDecoder().decode(TopRatedMovieModelResponse.self, from: data)
+                        let responseData = try JSONDecoder().decode(MovieModelResponse.self, from: data)
                         single(.success(responseData))
                     } catch(let error) {
                         print(error)
@@ -62,17 +62,17 @@ extension MovieService: MovieAPI {
         }
     }
     
-    func fetchUpmcomingMovies() -> Single<UpcomingMoviesModelResponse> {
+    func fetchUpmcomingMovies() -> Single<MovieModelResponse> {
         return Single.create { (single) -> Disposable in
             
             do {
                 
                 let request = try MovieRouter.getUpcomingMovies.request(usingHttpService: self.httpService)
-                request.responseDecodable(of: UpcomingMoviesModelResponse.self) { response in
+                request.responseDecodable(of: MovieModelResponse.self) { response in
                     guard let data = response.data else { return }
                     
                     do {
-                        let responseData = try JSONDecoder().decode(UpcomingMoviesModelResponse.self, from: data)
+                        let responseData = try JSONDecoder().decode(MovieModelResponse.self, from: data)
                         single(.success(responseData))
                     } catch(let error) {
                         print(error)

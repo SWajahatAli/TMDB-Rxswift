@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct PopularMovieModelResponse: Codable {
+struct MovieModelResponse: Codable {
     var page: Int
-    var results: [PopularMoviesModel]
+    var results: [MoviesModel]
     var totalPages: Int
     var totalResults: Int
     
@@ -21,7 +21,7 @@ struct PopularMovieModelResponse: Codable {
     }
 }
 
-struct PopularMoviesModel: Codable {
+struct MoviesModel: Codable {
     var adult: Bool
     var backdropPath: String
     var genreIds: [Int]
@@ -53,16 +53,55 @@ struct PopularMoviesModel: Codable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
+    
+    init() {
+        self.adult = false
+        self.backdropPath = ""
+        self.genreIds = []
+        self.id = 0
+        self.originalLanguage = ""
+        self.originalTitle = ""
+        self.overview = ""
+        self.popularity = 0
+        self.posterPath = ""
+        self.releaseDate = ""
+        self.title = ""
+        self.video = false
+        self.voteAverage = 0
+        self.voteCount = 0
+    }
+    
+    init?(fromArray from: [MoviesModel]) {
+        guard let firstMovie = from.first else {
+            return nil
+        }
+        
+        self.adult = firstMovie.adult
+        self.backdropPath = firstMovie.backdropPath
+        self.genreIds = firstMovie.genreIds
+        self.id = firstMovie.id
+        self.originalLanguage = firstMovie.originalLanguage
+        self.originalTitle = firstMovie.originalTitle
+        self.overview = firstMovie.overview
+        self.popularity = firstMovie.popularity
+        self.posterPath = firstMovie.posterPath
+        self.releaseDate = firstMovie.releaseDate
+        self.title = firstMovie.title
+        self.video = firstMovie.video
+        self.voteAverage = firstMovie.voteAverage
+        self.voteCount = firstMovie.voteCount
+        
+    }
 }
 
-extension PopularMoviesModel: Hashable {
+extension MoviesModel: Hashable {
     func hasher(into coder: inout Hasher) {
         coder.combine(id)
     }
 }
 
-extension PopularMoviesModel: Equatable {
-    static func ==(lhs: PopularMoviesModel, rhs: PopularMoviesModel) -> Bool {
+extension MoviesModel: Equatable {
+    static func ==(lhs: MoviesModel, rhs: MoviesModel) -> Bool {
         return lhs.id == rhs.id
     }
 }
