@@ -65,7 +65,7 @@ class MovieViewController: UIViewController, Storyboadable {
                                       topRateButtonTap: topRatedButtonTap.topRatedButtonTapState.asObservable()))
         
         configureSwiftUI()
-        bindingUI()
+        setupUI()
     }
     
     func configureSwiftUI() {
@@ -90,37 +90,35 @@ class MovieViewController: UIViewController, Storyboadable {
         
         hostingController.didMove(toParent: self)
     }
-    
 }
 
 extension MovieViewController {
-    func bindingUI() {
-        self.viewModel.output.popularMoviesModel.subscribe { popularMovieResponseModel in
-            //
-        }
-        
-        self.viewModel.output.upcomingMoviesModel.subscribe { upcomingMoviesModelResponse in
-            //
-        }
-        
-        self.viewModel.output.topRateMoviesModel.subscribe { topRateMovieModelResponse in
-            //
-        }
+    func setupUI() {
+        tblMovieList.register(UINib(nibName: "MoviesTableViewCell", bundle: .main), forCellReuseIdentifier: "MoviesTableViewCell")
     }
 }
 
 extension MovieViewController: TapButtonDelegate {
     func didSelectTag(_ moviePageType: MoviePageType) {
         switch moviePageType {
-        case .upcoming:
-            print("`upcoming` called")
-            upcomingButtonTap.upcomingButtonTapState.accept(())
-        case .top_rated:
-            print("`top_rated` called")
-            topRatedButtonTap.topRatedButtonTapState.accept(())
         case .popular:
             print("`popular` called")
-            popularButtonTap.popularButtonTapState.accept(())
+            viewModel.output.popularMoviesModel.asObservable().subscribe { movieModel in
+                print(movieModel)
+            }
+            .disposed(by: bag)
+        case .upcoming:
+            print("`upcoming` called")
+            viewModel.output.upcomingMoviesModel.asObservable().subscribe { upcomingModel in
+                print(upcomingModel)
+            }
+            .disposed(by: bag)
+        case .top_rated:
+            print("`top_rated` called")
+            viewModel.output.topRateMoviesModel.asObservable().subscribe { topModel in
+                print(topModel)
+            }
+            .disposed(by: bag)
         }
     }
 }

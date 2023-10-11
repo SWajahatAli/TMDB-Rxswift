@@ -24,6 +24,23 @@ class MovieTableViewModel: MovieTablePresentable {
     var bookmarked: Bool = false
     var rating: Double = 0.0
     var description: String = ""
-     
     
+    init(model: MoviesModel) {
+        self.title = model.title
+//        self.yearOfRelease = model.releaseDate
+        self.bookmarked = false
+//        self.rating = model.
+    }
+}
+
+extension MovieTableViewModel: Hashable {
+    func hash(into coder: inout Hasher) {
+        coder.combine(title)
+    }
+}
+
+extension MovieTableViewModel: Equatable {
+    static func ==(lhs: MovieTableViewModel, rhs: MovieTableViewModel) -> Bool {
+        return lhs.title == rhs.title
+    }
 }

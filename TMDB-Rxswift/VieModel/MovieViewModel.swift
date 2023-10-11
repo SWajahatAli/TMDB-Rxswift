@@ -14,8 +14,7 @@ import SwiftUI
 
 protocol MoviePresentable {
     typealias Input = (popularButtonTap: Observable<Void>, upcomingButtonTap: Observable<Void>, topRateButtonTap: Observable<Void>)
-    typealias Ouput = (popularMoviesModel: Observable<PopularMovieModelResponse>, upcomingMoviesModel: Observable<UpcomingMoviesModelResponse>, topRateMoviesModel: Observable<TopRatedMovieModelResponse>)
-//    typealias Ouput = (topRateMoviesModel: Observable<TopRatedMovieModelResponse>, ())
+    typealias Ouput = (popularMoviesModel: Observable<[MoviesModel]>, upcomingMoviesModel: Observable<[MoviesModel]>, topRateMoviesModel: Observable<[MoviesModel]>)
 
     typealias ViewModelBuilder = (MoviePresentable.Input) -> MoviePresentable
     
@@ -28,44 +27,46 @@ class MovieViewModel: MoviePresentable {
     var output: MoviePresentable.Ouput
     
     private(set) var apiService: MovieAPI
+    private var movieResponseModel = MovieModelResponse.init(page: 0, results: [], totalPages: 0, totalResults: 0)
     
-    typealias PopularMoviesState = (popularMovies: BehaviorRelay<Set<PopularMoviesModel>>, ())
-    fileprivate var popularState:PopularMoviesState = (popularMovies: BehaviorRelay<Set<PopularMoviesModel>>(value: []), ())
-    
-    typealias TopRateMoviesState = (topRatedMovies: BehaviorRelay<Set<TopRateMoviesModel>>, ())
-    fileprivate var topRatedState:TopRateMoviesState = (topRatedMovies: BehaviorRelay<Set<TopRateMoviesModel>>(value: []), ())
-    
-    typealias UpcomingMoviesState = (upcomingMovies: BehaviorRelay<Set<UpcomingMoviesModel>>, ())
-    fileprivate var upcomingState:UpcomingMoviesState = (upcomingMovies: BehaviorRelay<Set<UpcomingMoviesModel>>(value: []), ())
-    
-
     let bag = DisposeBag() // It is something that is reponsible to deallocate all the observables whenever struct/class deinits
+    
+    let fetchPopularMovies: Observable<[MoviesModel]>
+    let fetchUpcomingMovies: Observable<[MoviesModel]>
+    let fetchTopRatedMovies: Observable<[MoviesModel]>
     
     init(input: MoviePresentable.Input, apiService: MovieAPI) {
         self.input = input
         
-        let popularBtnTapObservable = input.popularButtonTap
-                        .flatMapLatest { _ in
-                            return apiService.fetchPopularMovies()
-                                .asObservable()
-                        }
+        fetchPopularMovies = input.popularButtonTap
+            .flatMapLatest({ _ in
+                return apiService.fetchPopularMovies()
+                    .map { $0.results }
+                    .asDriver(onErrorJustReturn: [])
+            })
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
+    
+        fetchUpcomingMovies = input.upcomingButtonTap
+            .flatMapLatest { _ in
+                return apiService.fetchUpmcomingMovies()
+                        .map { $0.results }
+                        .asDriver(onErrorJustReturn: [])
+            }
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
         
-        let upcomingBtnTapObservable = input.upcomingButtonTap
-                        .flatMapLatest { _ in
-                            return apiService.fetchUpmcomingMovies()
-                                .asObservable()
-                        }
+        fetchTopRatedMovies = input.topRateButtonTap
+            .flatMapLatest { _ in
+                return apiService.fetchTopRateMovies()
+                    .map { $0.results }
+                    .asDriver(onErrorJustReturn: [])
+            }
+            .asDriver(onErrorJustReturn: [])
+            .asObservable()
         
-        let topRatedBtnTapObservable = input.topRateButtonTap
-                        .flatMapLatest { _ in
-                            return apiService.fetchTopRateMovies()
-                                .asObservable()
-                    }
-        
-        self.output = (popularMoviesModel: popularBtnTapObservable, upcomingMoviesModel: upcomingBtnTapObservable, topRateMoviesModel: topRatedBtnTapObservable)
-        
+        self.output = (popularMoviesModel: fetchPopularMovies, upcomingMoviesModel: fetchUpcomingMovies, topRateMoviesModel: fetchTopRatedMovies)
         self.apiService = apiService
-//        self.process()
     }
 }
 
