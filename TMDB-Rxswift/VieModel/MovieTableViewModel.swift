@@ -8,9 +8,10 @@
 import Foundation
 import RxDataSources
 
-typealias MovieItemsSection = SectionModel<Int, MoviePresentable>
+typealias MovieItemsSection = SectionModel<Int, MovieTablePresentable>
 
 protocol MovieTablePresentable {
+    var image: String { get }
     var title: String { get }
     var yearOfRelease: Int { get }
     var bookmarked: Bool { get }
@@ -18,7 +19,8 @@ protocol MovieTablePresentable {
     var description: String { get }
 }
 
-class MovieTableViewModel: MovieTablePresentable {
+struct MovieTableViewModel: MovieTablePresentable {
+    var image: String = ""
     var title: String = ""
     var yearOfRelease: Int = 0
     var bookmarked: Bool = false
@@ -26,10 +28,7 @@ class MovieTableViewModel: MovieTablePresentable {
     var description: String = ""
     
     init(model: MoviesModel) {
-        self.title = model.title
-//        self.yearOfRelease = model.releaseDate
-        self.bookmarked = false
-//        self.rating = model.
+        
     }
 }
 
