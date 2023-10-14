@@ -36,11 +36,7 @@ class MovieViewController: UIViewController, Storyboadable {
     ]
     
     var movieTypeEnum: MoviePageType = .popular
-    
-    // Define a computed property to access the observable
-    typealias MovieTypeState = (movieType: BehaviorRelay<Int>, ())
-    fileprivate var movieTypeObservable: MovieTypeState = (movieType: BehaviorRelay<Int>(value: 0), ())
-    
+        
     // Button Tap States
     typealias PopularButtonTapState = (popularButtonTapState: BehaviorRelay<Void>, ())
     fileprivate var popularButtonTap: PopularButtonTapState = (popularButtonTapState: BehaviorRelay<Void>(value: ()), ())
@@ -52,10 +48,21 @@ class MovieViewController: UIViewController, Storyboadable {
     fileprivate var topRatedButtonTap: TopRatedButtonTapState = (topRatedButtonTapState: BehaviorRelay<Void>(value: ()), ())
     
     // DataSource
-    private lazy var dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection> { ds, tblView, _, item in
-        return UITableViewCell()
+    private lazy var tbl_dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection> { (_, tv, indexPath, element) in
+        let cell: MoviesTableViewCell = tv.dequeueReusableCell(withIdentifier: "MoviesTableViewCell", for: indexPath) as! MoviesTableViewCell
+        //            cell.configure(usingViewModel: item)
+        return cell
     }
     
+    let dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection>(
+        configureCell: { (dataSource, tableView, indexPath, item) in
+            // Configure the cell with the item
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MoviesTableViewCell", for: indexPath) as! MoviesTableViewCell
+//            cell.configure(with: item)
+            return cell
+        }
+    )
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -103,10 +110,11 @@ extension MovieViewController: TapButtonDelegate {
         switch moviePageType {
         case .popular:
             print("`popular` called")
-            viewModel.output.popularMoviesModel.asObservable().subscribe { movieModel in
-                print(movieModel)
-            }
-            .disposed(by: bag)
+            viewModel
+                .output
+                .popularMoviesModel
+                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+                .disposed(by: bag)
         case .upcoming:
             print("`upcoming` called")
             viewModel.output.upcomingMoviesModel.asObservable().subscribe { upcomingModel in
