@@ -13,7 +13,7 @@ typealias MovieItemsSection = SectionModel<Int, MovieTablePresentable>
 protocol MovieTablePresentable {
     var image: String { get }
     var title: String { get }
-    var yearOfRelease: Int { get }
+    var yearOfRelease: String { get }
     var bookmarked: Bool { get }
     var rating: Double { get }
     var description: String { get }
@@ -22,13 +22,28 @@ protocol MovieTablePresentable {
 struct MovieTableViewModel: MovieTablePresentable {
     var image: String = ""
     var title: String = ""
-    var yearOfRelease: Int = 0
+    var yearOfRelease: String = ""
     var bookmarked: Bool = false
     var rating: Double = 0.0
     var description: String = ""
     
-    init(model: MoviesModel) {
+    init() {
         
+    }
+    
+    init(model: MoviesModel) {
+        self.image = model.posterPath
+        self.title = model.title
+        self.yearOfRelease = model.releaseDate
+        self.bookmarked = false
+        self.rating = 0.0
+        self.description = model.overview
+    }
+}
+
+extension MovieTableViewModel {
+    func convertToPresentable(model: MoviesModel) -> MovieTablePresentable {
+        return MovieTableViewModel(model: model)
     }
 }
 

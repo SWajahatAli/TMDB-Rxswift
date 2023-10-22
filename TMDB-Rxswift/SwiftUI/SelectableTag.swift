@@ -28,16 +28,25 @@ struct TagButtonView: View {
             HStack(spacing: 10) {
                 ForEach(0..<tags.count) { index in
                     Button(action: {
+                        let newTag = tags.compactMap { tag in
+                            var newTag = tag
+                            newTag.isSelected = false
+                            return newTag
+                        }
+                        tags = newTag
                         withAnimation {
                             selectedTag = index
                         }
 
                         // Add your button action here
                         if tags[index].id == 1 {
+                            tags[index].isSelected = true
                             self.delegate?.didSelectTag(.popular)
                         } else if tags[index].id == 2 {
+                            tags[index].isSelected = true
                             self.delegate?.didSelectTag(.upcoming)
                         } else if tags[index].id == 3 {
+                            tags[index].isSelected = true
                             self.delegate?.didSelectTag(.top_rated)
                         }
                     }) {

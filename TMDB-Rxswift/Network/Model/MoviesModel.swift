@@ -4,7 +4,6 @@
 //
 //  Created by Syed Wajahat Ali on 01/10/2023.
 //
-
 import Foundation
 
 struct MovieModelResponse: Codable {
@@ -12,7 +11,7 @@ struct MovieModelResponse: Codable {
     var results: [MoviesModel]
     var totalPages: Int
     var totalResults: Int
-    
+
     enum CodingKeys: String, CodingKey  {
         case page = "page"
         case results = "results"
@@ -36,7 +35,7 @@ struct MoviesModel: Codable {
     var video: Bool
     var voteAverage: Double
     var voteCount: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case adult = "adult"
         case backdropPath = "backdrop_path"
@@ -53,7 +52,7 @@ struct MoviesModel: Codable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
-    
+
     init() {
         self.adult = false
         self.backdropPath = ""
@@ -70,12 +69,12 @@ struct MoviesModel: Codable {
         self.voteAverage = 0
         self.voteCount = 0
     }
-    
+
     init?(fromArray from: [MoviesModel]) {
         guard let firstMovie = from.first else {
             return nil
         }
-        
+
         self.adult = firstMovie.adult
         self.backdropPath = firstMovie.backdropPath
         self.genreIds = firstMovie.genreIds
@@ -90,7 +89,7 @@ struct MoviesModel: Codable {
         self.video = firstMovie.video
         self.voteAverage = firstMovie.voteAverage
         self.voteCount = firstMovie.voteCount
-        
+
     }
 }
 

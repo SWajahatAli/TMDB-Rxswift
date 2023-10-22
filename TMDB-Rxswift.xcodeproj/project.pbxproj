@@ -17,6 +17,7 @@
 		861DE8AE2AD2B28D007D1400 /* MoviesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DE8AC2AD2B28D007D1400 /* MoviesTableViewCell.swift */; };
 		861DE8AF2AD2B28D007D1400 /* MoviesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861DE8AD2AD2B28D007D1400 /* MoviesTableViewCell.xib */; };
 		861DE8B12AD2C95C007D1400 /* MovieTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DE8B02AD2C95C007D1400 /* MovieTableViewModel.swift */; };
+		86A785732ADB270600EEDD80 /* CustomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A785722ADB270600EEDD80 /* CustomNavigation.swift */; };
 		86AEDBC02AC8601A0073E7AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDBBF2AC8601A0073E7AE /* AppDelegate.swift */; };
 		86AEDBC22AC8601A0073E7AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDBC12AC8601A0073E7AE /* SceneDelegate.swift */; };
 		86AEDBC72AC8601A0073E7AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86AEDBC52AC8601A0073E7AE /* Main.storyboard */; };
@@ -39,7 +40,7 @@
 		86AEDC0F2AC8B4200073E7AE /* MovieHttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC0E2AC8B4200073E7AE /* MovieHttpService.swift */; };
 		86AEDC112AC8B4DB0073E7AE /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC102AC8B4DB0073E7AE /* MovieService.swift */; };
 		86AEDC132AC8BEEC0073E7AE /* MovieAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC122AC8BEEC0073E7AE /* MovieAPI.swift */; };
-		86AEDC162AC8BF7E0073E7AE /* PopularMoviesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC152AC8BF7E0073E7AE /* PopularMoviesModel.swift */; };
+		86AEDC162AC8BF7E0073E7AE /* MoviesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC152AC8BF7E0073E7AE /* MoviesModel.swift */; };
 		86AEDC182AC8BFA00073E7AE /* UpcomingMoviesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC172AC8BFA00073E7AE /* UpcomingMoviesModel.swift */; };
 		86AEDC1A2AC8BFB00073E7AE /* TopRateMoviesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEDC192AC8BFB00073E7AE /* TopRateMoviesModel.swift */; };
 /* End PBXBuildFile section */
@@ -73,6 +74,7 @@
 		861DE8AC2AD2B28D007D1400 /* MoviesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesTableViewCell.swift; sourceTree = "<group>"; };
 		861DE8AD2AD2B28D007D1400 /* MoviesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoviesTableViewCell.xib; sourceTree = "<group>"; };
 		861DE8B02AD2C95C007D1400 /* MovieTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewModel.swift; sourceTree = "<group>"; };
+		86A785722ADB270600EEDD80 /* CustomNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigation.swift; sourceTree = "<group>"; };
 		86AEDBBC2AC8601A0073E7AE /* TMDB-Rxswift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TMDB-Rxswift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86AEDBBF2AC8601A0073E7AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86AEDBC12AC8601A0073E7AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,7 +101,7 @@
 		86AEDC0E2AC8B4200073E7AE /* MovieHttpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHttpService.swift; sourceTree = "<group>"; };
 		86AEDC102AC8B4DB0073E7AE /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		86AEDC122AC8BEEC0073E7AE /* MovieAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPI.swift; sourceTree = "<group>"; };
-		86AEDC152AC8BF7E0073E7AE /* PopularMoviesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularMoviesModel.swift; sourceTree = "<group>"; };
+		86AEDC152AC8BF7E0073E7AE /* MoviesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesModel.swift; sourceTree = "<group>"; };
 		86AEDC172AC8BFA00073E7AE /* UpcomingMoviesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMoviesModel.swift; sourceTree = "<group>"; };
 		86AEDC192AC8BFB00073E7AE /* TopRateMoviesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRateMoviesModel.swift; sourceTree = "<group>"; };
 		9A646A9121E9DE740A586EAE /* Pods-TMDB-Rxswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TMDB-Rxswift.release.xcconfig"; path = "Target Support Files/Pods-TMDB-Rxswift/Pods-TMDB-Rxswift.release.xcconfig"; sourceTree = "<group>"; };
@@ -186,6 +188,14 @@
 			path = TableViewCell;
 			sourceTree = "<group>";
 		};
+		86A785712ADB26FB00EEDD80 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				86A785722ADB270600EEDD80 /* CustomNavigation.swift */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
 		86AEDBB32AC8601A0073E7AE = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +221,7 @@
 		86AEDBBE2AC8601A0073E7AE /* TMDB-Rxswift */ = {
 			isa = PBXGroup;
 			children = (
+				86A785712ADB26FB00EEDD80 /* Custom */,
 				8618667D2AD9C92000A5C433 /* Extension */,
 				861866762AD9C5E700A5C433 /* CollectionViewCell */,
 				861DE8AB2AD2B270007D1400 /* TableViewCell */,
@@ -333,7 +344,7 @@
 		86AEDC142AC8BF6F0073E7AE /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				86AEDC152AC8BF7E0073E7AE /* PopularMoviesModel.swift */,
+				86AEDC152AC8BF7E0073E7AE /* MoviesModel.swift */,
 				86AEDC172AC8BFA00073E7AE /* UpcomingMoviesModel.swift */,
 				86AEDC192AC8BFB00073E7AE /* TopRateMoviesModel.swift */,
 			);
@@ -599,8 +610,9 @@
 				86AEDC0B2AC88C310073E7AE /* MovieRouter.swift in Sources */,
 				86AEDC0F2AC8B4200073E7AE /* MovieHttpService.swift in Sources */,
 				86AEDC0D2AC89A320073E7AE /* Config.swift in Sources */,
+				86A785732ADB270600EEDD80 /* CustomNavigation.swift in Sources */,
 				86AEDBC02AC8601A0073E7AE /* AppDelegate.swift in Sources */,
-				86AEDC162AC8BF7E0073E7AE /* PopularMoviesModel.swift in Sources */,
+				86AEDC162AC8BF7E0073E7AE /* MoviesModel.swift in Sources */,
 				861DE8AE2AD2B28D007D1400 /* MoviesTableViewCell.swift in Sources */,
 				86AEDC112AC8B4DB0073E7AE /* MovieService.swift in Sources */,
 				86AEDBC22AC8601A0073E7AE /* SceneDelegate.swift in Sources */,
@@ -795,6 +807,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -823,6 +837,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

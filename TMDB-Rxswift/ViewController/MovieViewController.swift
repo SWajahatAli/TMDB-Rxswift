@@ -17,7 +17,7 @@ enum MoviePageType: Int, CaseIterable {
     case top_rated
 }
 
-class MovieViewController: UIViewController, Storyboadable {
+class MovieViewController: UIViewController, Storyboadable, UITableViewDelegate {
     
     @IBOutlet weak var tagView: UIView!
     @IBOutlet weak var tblMovieList: UITableView!
@@ -48,21 +48,22 @@ class MovieViewController: UIViewController, Storyboadable {
     fileprivate var topRatedButtonTap: TopRatedButtonTapState = (topRatedButtonTapState: BehaviorRelay<Void>(value: ()), ())
     
     // DataSource
-    private lazy var tbl_dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection> { (_, tv, indexPath, element) in
-        let cell: MoviesTableViewCell = tv.dequeueReusableCell(withIdentifier: "MoviesTableViewCell", for: indexPath) as! MoviesTableViewCell
-        //            cell.configure(usingViewModel: item)
-        return cell
-    }
-    
     let dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection>(
         configureCell: { (dataSource, tableView, indexPath, item) in
             // Configure the cell with the item
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MoviesTableViewCell", for: indexPath) as! MoviesTableViewCell
-//            cell.configure(with: item)
-            return cell
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "MoviesTableViewCell", for: indexPath) as? MoviesTableViewCell {
+                cell.configure(usingViewModel: item)
+                return cell
+            }
+            
+            return UITableViewCell()
         }
     )
-
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -97,10 +98,21 @@ class MovieViewController: UIViewController, Storyboadable {
         
         hostingController.didMove(toParent: self)
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150.0
+    }
+
 }
 
 extension MovieViewController {
     func setupUI() {
+        
+        self.navigationController?.navigationBar.topItem?.title = "Watch Now"
+        
+        tblMovieList.estimatedRowHeight = 150.0
+        tblMovieList.rowHeight = UITableView().estimatedRowHeight
+        
         tblMovieList.register(UINib(nibName: "MoviesTableViewCell", bundle: .main), forCellReuseIdentifier: "MoviesTableViewCell")
     }
 }
@@ -110,6 +122,8 @@ extension MovieViewController: TapButtonDelegate {
         switch moviePageType {
         case .popular:
             print("`popular` called")
+            tblMovieList.delegate = nil
+            tblMovieList.dataSource = nil
             viewModel
                 .output
                 .popularMoviesModel
@@ -117,16 +131,22 @@ extension MovieViewController: TapButtonDelegate {
                 .disposed(by: bag)
         case .upcoming:
             print("`upcoming` called")
-            viewModel.output.upcomingMoviesModel.asObservable().subscribe { upcomingModel in
-                print(upcomingModel)
-            }
-            .disposed(by: bag)
+            tblMovieList.delegate = nil
+            tblMovieList.dataSource = nil
+            viewModel
+                .output
+                .upcomingMoviesModel
+                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+                .disposed(by: bag)
         case .top_rated:
             print("`top_rated` called")
-            viewModel.output.topRateMoviesModel.asObservable().subscribe { topModel in
-                print(topModel)
-            }
-            .disposed(by: bag)
+            tblMovieList.delegate = nil
+            tblMovieList.dataSource = nil
+            viewModel
+                .output
+                .topRateMoviesModel
+                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+                .disposed(by: bag)
         }
     }
 }
