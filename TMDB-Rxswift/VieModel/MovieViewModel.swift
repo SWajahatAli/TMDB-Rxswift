@@ -57,6 +57,31 @@ class MovieViewModel: MoviePresentable {
         
         self.output = (popularMoviesModel: fetchPopularMovies, upcomingMoviesModel: fetchUpcomingMovies, topRateMoviesModel: fetchTopRatedMovies)
         self.apiService = apiService
+        
+        _ = self.process(apiService: apiService, state: popularMovieTypeState)
+    }
+}
+
+extension MovieViewModel {
+    func process(apiService: MovieAPI, state: PopularMovieTypeState) -> Observable<[MovieItemsSection]> {
+        _ = input.popularButtonTap
+            .flatMapLatest({ _ in
+                return apiService.fetchPopularMovies()
+                    .map({ Set($0.results) })
+                    .asDriver(onErrorJustReturn: Set<MoviesModel>())
+            })
+            .asObservable()
+            .bind(to: state.movieType)
+            .disposed(by: bag)
+        
+        return state.movieType.compactMap {
+            $0.map {
+                MovieTableViewModel().convertToPresentable(model: $0)
+            }
+        }
+        .map { movieTablePresentable in
+            return [MovieItemsSection(model: 0, items: movieTablePresentable)]
+        }
     }
 }
 
@@ -72,17 +97,14 @@ extension MovieViewModel {
             .bind(to: state.movieType)
             .disposed(by: bag)
         
-        return state.movieType.compactMap{ movieModel -> [MovieTablePresentable]? in
-            if let movieTablePresentable = movieModel as? MovieTablePresentable {
-                return [movieTablePresentable]
+        return state.movieType.compactMap {
+            $0.map {
+                MovieTableViewModel().convertToPresentable(model: $0)
             }
-            return nil
-            
         }
-        .map { movieModel in
-            [MovieItemsSection(model: 0, items: movieModel)]
+        .map { movieTablePresentable in
+            return [MovieItemsSection(model: 0, items: movieTablePresentable)]
         }
-        .asObservable()
     }
     
     static func fetchUpcomingMovies(bag: DisposeBag, input: MovieViewModel.Input, apiService: MovieAPI, state: UpcomingMovieTypeState) -> Observable<[MovieItemsSection]> {
@@ -98,12 +120,10 @@ extension MovieViewModel {
             .bind(to: state.upcomingMovie)
             .disposed(by: bag)
         
-        return state.upcomingMovie.compactMap { movieModel -> [MovieTablePresentable]? in
-            if let movieTablePresentable = movieModel as? MovieTablePresentable {
-                return [movieTablePresentable]
+        return state.upcomingMovie.compactMap {
+            $0.map {
+                MovieTableViewModel().convertToPresentable(model: $0)
             }
-            
-            return nil
         }
         .map { movieTablePresentable in
             return [MovieItemsSection(model: 0, items: movieTablePresentable)]
@@ -122,12 +142,10 @@ extension MovieViewModel {
             .bind(to: state.topRateMovie)
             .disposed(by: bag)
         
-        return state.topRateMovie.compactMap { movieModel -> [MovieTablePresentable]? in
-            if let movieModelPresentable = movieModel as? MovieTablePresentable {
-                return [movieModelPresentable]
+        return state.topRateMovie.compactMap {
+            $0.compactMap {
+                MovieTableViewModel().convertToPresentable(model: $0)
             }
-            
-            return nil
         }
         .map { movieModelPresentable in
             return [MovieItemsSection(model: 0, items: movieModelPresentable)]
