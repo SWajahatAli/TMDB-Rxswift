@@ -6,7 +6,8 @@ target 'TMDB-Rxswift' do
   use_frameworks!
 
   # Pods for TMDB-Rxswift
-    pod 'Alamofire'	
+    pod 'Alamofire'
+    pod 'AlamofireImage', '~> 4.3'
     pod 'RxSwift', '6.5.0'
     pod 'RxCocoa', '6.5.0'
     pod 'RxDataSources', '~> 5.0'

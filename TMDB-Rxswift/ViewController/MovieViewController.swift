@@ -31,8 +31,8 @@ class MovieViewController: UIViewController, Storyboadable, UITableViewDelegate 
     
     var tags: [TagModel] = [
         TagModel(id: MoviePageType.popular.rawValue, title: "Popular Movies", isSelected: false),
-        TagModel(id: MoviePageType.upcoming.rawValue, title: "Upcoming Movies", isSelected: true),
-        TagModel(id: MoviePageType.top_rated.rawValue, title: "Top Rated Movies", isSelected: true)
+        TagModel(id: MoviePageType.upcoming.rawValue, title: "Upcoming Movies", isSelected: false),
+        TagModel(id: MoviePageType.top_rated.rawValue, title: "Top Rated Movies", isSelected: false)
     ]
     
     var movieTypeEnum: MoviePageType = .popular
@@ -70,7 +70,8 @@ class MovieViewController: UIViewController, Storyboadable, UITableViewDelegate 
         // Do any additional setup after loading the view.
         viewModel = viewModelBuilder((popularButtonTap: popularButtonTap.popularButtonTapState.asObservable(),
                                       upcomingButtonTap: upcomingButtonTap.upcomingButtonTapState.asObservable(),
-                                      topRateButtonTap: topRatedButtonTap.topRatedButtonTapState.asObservable()))
+                                      topRateButtonTap: topRatedButtonTap.topRatedButtonTapState.asObservable(),
+                                      movieSelected: tblMovieList.rx.modelSelected(MovieTableViewModel.self).asDriver()))
         
         configureSwiftUI()
         setupUI()
@@ -114,6 +115,12 @@ extension MovieViewController {
         tblMovieList.rowHeight = UITableView().estimatedRowHeight
         
         tblMovieList.register(UINib(nibName: "MoviesTableViewCell", bundle: .main), forCellReuseIdentifier: "MoviesTableViewCell")
+        
+        viewModel
+            .output
+            .popularMoviesModel
+            .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+            .disposed(by: bag)
     }
 }
 
