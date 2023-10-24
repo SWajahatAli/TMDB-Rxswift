@@ -47,6 +47,36 @@
             </objects>
             <point key="canvasLocation" x="125.95419847328243" y="-27.464788732394368"/>
         </scene>
+        <!--Movie Detail View Controller-->
+        <scene sceneID="NwW-si-UPA">
+            <objects>
+                <viewController storyboardIdentifier="MovieDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Jc2-Mq-1cY" customClass="MovieDetailViewController" customModule="TMDB_Rxswift" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7Ph-YT-t78">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="1qZ-Z9-qpX">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="mgZ-Ap-6wT"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="mgZ-Ap-6wT" firstAttribute="trailing" secondItem="1qZ-Z9-qpX" secondAttribute="trailing" id="DWI-IG-7sV"/>
+                            <constraint firstItem="1qZ-Z9-qpX" firstAttribute="leading" secondItem="mgZ-Ap-6wT" secondAttribute="leading" id="Jhu-RZ-kWv"/>
+                            <constraint firstItem="1qZ-Z9-qpX" firstAttribute="top" secondItem="mgZ-Ap-6wT" secondAttribute="top" id="X1b-CD-Hnh"/>
+                            <constraint firstItem="mgZ-Ap-6wT" firstAttribute="bottom" secondItem="1qZ-Z9-qpX" secondAttribute="bottom" id="f6c-yK-Bqz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="movieDetailTableView" destination="1qZ-Z9-qpX" id="b1o-cx-ANt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XQF-hR-QY8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="874" y="-27"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">

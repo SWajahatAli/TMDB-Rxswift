@@ -14,7 +14,7 @@ import SwiftUI
 import RxDataSources
 
 protocol MoviePresentable {
-    typealias Input = (popularButtonTap: Observable<Void>, upcomingButtonTap: Observable<Void>, topRateButtonTap: Observable<Void>)
+    typealias Input = (popularButtonTap: Observable<Void>, upcomingButtonTap: Observable<Void>, topRateButtonTap: Observable<Void>, movieSelected: Driver<MovieTableViewModel>)
     typealias Ouput = (popularMoviesModel: Observable<[MovieItemsSection]>, upcomingMoviesModel: Observable<[MovieItemsSection]>, topRateMoviesModel: Observable<[MovieItemsSection]>)
 
     typealias ViewModelBuilder = (MoviePresentable.Input) -> MoviePresentable
@@ -42,6 +42,13 @@ class MovieViewModel: MoviePresentable {
     typealias TopRatedMovieTypeState = (topRateMovie: BehaviorRelay<Set<MoviesModel>>, ())
     fileprivate var topRatedMovieTypeState: TopRatedMovieTypeState = (topRateMovie: BehaviorRelay<Set<MoviesModel>>(value: Set<MoviesModel>()), ())
     
+    // Routing Action
+    typealias RoutingAction = (moviesRouting: PublishRelay<Set<MoviesModel>>, ())
+    private let routingAction: RoutingAction = (moviesRouting: PublishRelay(), ())
+    
+    typealias Routing = (movies: Driver<Set<MoviesModel>>, ())
+    lazy var router: Routing = (movies: self.routingAction.moviesRouting.asDriver(onErrorJustReturn: Set<MoviesModel>()), ())
+    
     let fetchPopularMovies: Observable<[MovieItemsSection]>
     let fetchUpcomingMovies: Observable<[MovieItemsSection]>
     let fetchTopRatedMovies: Observable<[MovieItemsSection]>
@@ -57,31 +64,31 @@ class MovieViewModel: MoviePresentable {
         
         self.output = (popularMoviesModel: fetchPopularMovies, upcomingMoviesModel: fetchUpcomingMovies, topRateMoviesModel: fetchTopRatedMovies)
         self.apiService = apiService
-        
-        _ = self.process(apiService: apiService, state: popularMovieTypeState)
+        self.process()
     }
 }
 
 extension MovieViewModel {
-    func process(apiService: MovieAPI, state: PopularMovieTypeState) -> Observable<[MovieItemsSection]> {
-        _ = input.popularButtonTap
-            .flatMapLatest({ _ in
-                return apiService.fetchPopularMovies()
-                    .map({ Set($0.results) })
-                    .asDriver(onErrorJustReturn: Set<MoviesModel>())
-            })
-            .asObservable()
-            .bind(to: state.movieType)
+    func process() {
+        apiService
+            .fetchPopularMovies()
+            .map({ Set($0.results) })
+            .map({ [popularMovieTypeState] in popularMovieTypeState.movieType.accept($0) })
+            .subscribe()
             .disposed(by: bag)
         
-        return state.movieType.compactMap {
-            $0.map {
-                MovieTableViewModel().convertToPresentable(model: $0)
+        input
+            .movieSelected
+            .map({ $0.title })
+            .withLatestFrom(popularMovieTypeState.movieType.asDriver()) { ($0, $1) }
+            .map { title, movies in
+                movies.filter({ $0.title == title })
             }
-        }
-        .map { movieTablePresentable in
-            return [MovieItemsSection(model: 0, items: movieTablePresentable)]
-        }
+            .map ({ [routingAction] in
+                routingAction.moviesRouting.accept($0)
+            })
+            .drive()
+            .disposed(by: bag)
     }
 }
 
