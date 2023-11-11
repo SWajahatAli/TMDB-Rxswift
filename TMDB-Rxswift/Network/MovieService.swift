@@ -87,4 +87,29 @@ extension MovieService: MovieAPI {
             return Disposables.create()
         }
     }
+    
+    func fetchGenreForMovies() -> Single<GenreMoveiModel> {
+        return Single.create { (single) -> Disposable in
+            
+            do {
+                
+                let request = try MovieRouter.getGenreMovie.request(usingHttpService: self.httpService)
+                request.responseDecodable(of: GenreMoveiModel.self) { response in
+                    guard let data = response.data else { return }
+                    
+                    do {
+                        let responseData = try JSONDecoder().decode(GenreMoveiModel.self, from: data)
+                        single(.success(responseData))
+                    } catch(let error) {
+                        single(.failure(error))
+                    }
+                }
+            } catch(let error) {
+                single(.failure(error))
+            }
+        
+            
+            return Disposables.create()
+        }
+    }
 }

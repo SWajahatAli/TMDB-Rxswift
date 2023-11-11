@@ -11,6 +11,7 @@ enum MovieRouter {
     case getPopularMovies
     case getTopRatedMovies
     case getUpcomingMovies
+    case getGenreMovie
 }
 
 extension MovieRouter: HttpRouter {
@@ -23,6 +24,8 @@ extension MovieRouter: HttpRouter {
         switch self {
         case .getUpcomingMovies, .getTopRatedMovies, .getPopularMovies:
             return "/discover/movie"
+        case .getGenreMovie:
+        return "genre/movie/list"
         }
     }
     
@@ -57,12 +60,16 @@ extension MovieRouter: HttpRouter {
                     "release_date.gte": "", // min_date,
                     "release_date.lte": "", // max_date
                 ]
+            case .getGenreMovie:
+                return [
+                    "language":"en-US"
+                ]
         }
     }
     
     var httpMethod: Alamofire.HTTPMethod {
         switch self {
-        case .getPopularMovies, .getTopRatedMovies, .getUpcomingMovies:
+        case .getPopularMovies, .getTopRatedMovies, .getUpcomingMovies, .getGenreMovie:
             return .get
         }
     }

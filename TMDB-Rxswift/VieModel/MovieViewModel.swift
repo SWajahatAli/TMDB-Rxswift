@@ -49,9 +49,9 @@ class MovieViewModel: MoviePresentable {
     typealias Routing = (movies: Driver<Set<MoviesModel>>, ())
     lazy var router: Routing = (movies: self.routingAction.moviesRouting.asDriver(onErrorJustReturn: Set<MoviesModel>()), ())
     
-    let fetchPopularMovies: Observable<[MovieItemsSection]>
-    let fetchUpcomingMovies: Observable<[MovieItemsSection]>
-    let fetchTopRatedMovies: Observable<[MovieItemsSection]>
+    private let fetchPopularMovies: Observable<[MovieItemsSection]>
+    private let fetchUpcomingMovies: Observable<[MovieItemsSection]>
+    private let fetchTopRatedMovies: Observable<[MovieItemsSection]>
     
     init(input: MoviePresentable.Input, apiService: MovieAPI) {
         self.input = input
