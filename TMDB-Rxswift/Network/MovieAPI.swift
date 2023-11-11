@@ -11,4 +11,5 @@ protocol MovieAPI {
     func fetchPopularMovies() -> Single<MovieModelResponse>
     func fetchUpmcomingMovies() -> Single<MovieModelResponse>
     func fetchTopRateMovies() -> Single<MovieModelResponse>
+    func fetchGenreForMovies() -> Single<GenreMoveiModel>
 }

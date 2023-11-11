@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-protocol TapButtonDelegate: NSObject {
-    func didSelectTag(_ moviePageType: MoviePageType)
-}
-
 struct TagModel: Identifiable {
     let id: Int
     let title: String
@@ -21,7 +17,7 @@ struct TagButtonView: View {
     var viewModel: MoviePresentable
     @State var tags: [TagModel]
     @State private var selectedTag: Int?
-    weak var delegate: TapButtonDelegate?
+    weak var delegate: MovieViewController?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -41,13 +37,13 @@ struct TagButtonView: View {
                         // Add your button action here
                         if tags[index].id == 1 {
                             tags[index].isSelected = true
-                            self.delegate?.didSelectTag(.popular)
+                            self.delegate?.buttonPopularTapped()
                         } else if tags[index].id == 2 {
                             tags[index].isSelected = true
-                            self.delegate?.didSelectTag(.upcoming)
+                            self.delegate?.buttonUpcomingTapped()
                         } else if tags[index].id == 3 {
                             tags[index].isSelected = true
-                            self.delegate?.didSelectTag(.top_rated)
+                            self.delegate?.buttonTopRatedTapped()
                         }
                     }) {
                         Text(tags[index].title)

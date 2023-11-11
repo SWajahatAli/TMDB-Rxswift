@@ -38,15 +38,10 @@ class MovieViewController: UIViewController, Storyboadable, UITableViewDelegate 
     var movieTypeEnum: MoviePageType = .popular
         
     // Button Tap States
-    typealias PopularButtonTapState = (popularButtonTapState: BehaviorRelay<Void>, ())
-    fileprivate var popularButtonTap: PopularButtonTapState = (popularButtonTapState: BehaviorRelay<Void>(value: ()), ())
+    let buttonPopular = PublishRelay<Void>()
+    let buttonUpcoming = PublishRelay<Void>()
+    let buttonTopRated = PublishRelay<Void>()
 
-    typealias UpcomingButtonTapState = (upcomingButtonTapState: BehaviorRelay<Void>, ())
-    fileprivate var upcomingButtonTap: UpcomingButtonTapState = (upcomingButtonTapState: BehaviorRelay<Void>(value: ()), ())
-    
-    typealias TopRatedButtonTapState = (topRatedButtonTapState: BehaviorRelay<Void>, ())
-    fileprivate var topRatedButtonTap: TopRatedButtonTapState = (topRatedButtonTapState: BehaviorRelay<Void>(value: ()), ())
-    
     // DataSource
     let dataSource = RxTableViewSectionedReloadDataSource<MovieItemsSection>(
         configureCell: { (dataSource, tableView, indexPath, item) in
@@ -68,10 +63,47 @@ class MovieViewController: UIViewController, Storyboadable, UITableViewDelegate 
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        viewModel = viewModelBuilder((popularButtonTap: popularButtonTap.popularButtonTapState.asObservable(),
-                                      upcomingButtonTap: upcomingButtonTap.upcomingButtonTapState.asObservable(),
-                                      topRateButtonTap: topRatedButtonTap.topRatedButtonTapState.asObservable(),
+        let btnPopularTapped = buttonPopular.asObservable()
+        let btnUpcomingTapped = buttonUpcoming.asObservable()
+        let btnRateButtonTapped = buttonTopRated.asObservable()
+        
+        viewModel = viewModelBuilder((popularButtonTap: btnPopularTapped,
+                                      upcomingButtonTap: btnUpcomingTapped,
+                                      topRateButtonTap: btnRateButtonTapped,
                                       movieSelected: tblMovieList.rx.modelSelected(MovieTableViewModel.self).asDriver()))
+        
+        btnPopularTapped.subscribe (onNext: { [weak self] _ in
+            self?.tblMovieList.dataSource = nil
+            if let weakSelf = self, let viewModel = self?.viewModel, let bag = self?.bag {
+                viewModel
+                    .output
+                    .popularMoviesModel
+                    .bind(to: weakSelf.tblMovieList.rx.items(dataSource: weakSelf.dataSource))
+                    .disposed(by: bag)
+            }
+        }).disposed(by: bag)
+        
+        btnRateButtonTapped.subscribe (onNext: { [weak self] in
+            self?.tblMovieList.dataSource = nil
+            if let weakSelf = self, let viewModel = self?.viewModel, let bag = self?.bag {
+                viewModel
+                    .output
+                    .topRateMoviesModel
+                    .bind(to: weakSelf.tblMovieList.rx.items(dataSource: weakSelf.dataSource))
+                    .disposed(by: bag)
+            }
+        }).disposed(by: bag)
+        
+        btnUpcomingTapped.subscribe (onNext: { [weak self] in
+            self?.tblMovieList.dataSource = nil
+            if let weakSelf = self, let viewModel = self?.viewModel, let bag = self?.bag {
+                viewModel
+                    .output
+                    .upcomingMoviesModel
+                    .bind(to: weakSelf.tblMovieList.rx.items(dataSource: weakSelf.dataSource))
+                    .disposed(by: bag)
+            }
+        }).disposed(by: bag)
         
         configureSwiftUI()
         setupUI()
@@ -111,7 +143,7 @@ extension MovieViewController {
         
         self.navigationController?.navigationBar.topItem?.title = "Watch Now"
         
-        tblMovieList.estimatedRowHeight = 150.0
+        tblMovieList.estimatedRowHeight = 170.0
         tblMovieList.rowHeight = UITableView().estimatedRowHeight
         
         tblMovieList.register(UINib(nibName: "MoviesTableViewCell", bundle: .main), forCellReuseIdentifier: "MoviesTableViewCell")
@@ -124,36 +156,49 @@ extension MovieViewController {
     }
 }
 
-extension MovieViewController: TapButtonDelegate {
-    func didSelectTag(_ moviePageType: MoviePageType) {
-        switch moviePageType {
-        case .popular:
-            print("`popular` called")
-            tblMovieList.delegate = nil
-            tblMovieList.dataSource = nil
-            viewModel
-                .output
-                .popularMoviesModel
-                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
-                .disposed(by: bag)
-        case .upcoming:
-            print("`upcoming` called")
-            tblMovieList.delegate = nil
-            tblMovieList.dataSource = nil
-            viewModel
-                .output
-                .upcomingMoviesModel
-                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
-                .disposed(by: bag)
-        case .top_rated:
-            print("`top_rated` called")
-            tblMovieList.delegate = nil
-            tblMovieList.dataSource = nil
-            viewModel
-                .output
-                .topRateMoviesModel
-                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
-                .disposed(by: bag)
-        }
+extension MovieViewController {
+//    func didSelectTag(_ moviePageType: MoviePageType) {
+//        switch moviePageType {
+//        case .popular:
+//            print("`popular` called")
+//            tblMovieList.delegate = nil
+//            tblMovieList.dataSource = nil
+//            viewModel
+//                .output
+//                .popularMoviesModel
+//                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+//                .disposed(by: bag)
+//        case .upcoming:
+//            print("`upcoming` called")
+//            tblMovieList.delegate = nil
+//            tblMovieList.dataSource = nil
+//            viewModel
+//                .output
+//                .upcomingMoviesModel
+//                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+//                .disposed(by: bag)
+//        case .top_rated:
+//            print("`top_rated` called")
+//            tblMovieList.delegate = nil
+//            tblMovieList.dataSource = nil
+//            viewModel
+//                .output
+//                .topRateMoviesModel
+//                .bind(to: tblMovieList.rx.items(dataSource: dataSource))
+//                .disposed(by: bag)
+//        }
+//    }
+    
+    func buttonPopularTapped() {
+        buttonPopular.accept(())
+    }
+    
+    func buttonUpcomingTapped() {
+        buttonUpcoming.accept(())
+        
+    }
+    
+    func buttonTopRatedTapped() {
+        buttonTopRated.accept(())
     }
 }
